@@ -9,6 +9,7 @@ class Main extends React.Component {
             currentCurrency: '$USD'
         }
         this.changeCategory = (newCategory) => {
+            console.log(this.state.currentCurrency)
             this.setState({
                 currenctCategory: newCategory
             });

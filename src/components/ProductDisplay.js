@@ -20,8 +20,8 @@ class ProductDisplay extends React.Component {
                             return <ProductListing key={index}
                                 title={item[1]['name']}
                                 thumbnail={item[1]['gallery'][0]}
-                                sellFor={item[1]['prices'][0]['amount']}
-                                currencySymbol={item[1]['prices'][0]['currency']['symbol']} />
+                                sellFor={Number(item[1]['prices'][0]['amount'] * exchangeRates[this.props.currentCurrency]).toFixed(2)}
+                                currencySymbol={this.props.currentCurrency[0]} />
                         }
                     } else {
                         return <ProductListing key={index}
