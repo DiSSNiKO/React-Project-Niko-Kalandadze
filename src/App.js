@@ -4,6 +4,7 @@ import React from "react";
 import { ApolloClient, InMemmoryCache, ApolloProvider, HttpLink, from, InMemoryCache, gql } from '@apollo/client';
 import { ErrorLink, onError } from '@apollo/client/link/error';
 
+
 const errorLink = onError(({ graphqlErrors, networkErrors }) => {
   if (graphqlErrors) {
     alert('graphql error');
