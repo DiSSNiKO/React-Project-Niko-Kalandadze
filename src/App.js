@@ -35,6 +35,11 @@ class App extends React.Component {
     this.dataProgress = 0;
     this.usableData = {};
   }
+  setPopUpWindowsClosed(val){
+    this.setState({
+      popUpWindowsClosed:val
+    });
+  }
   componentDidMount() {
     const amountOfItems = productIds.length;
     productIds.forEach((itemId) => {
@@ -78,24 +83,19 @@ class App extends React.Component {
       });
     });
   }
-  componentDidUpdate(prevProps, prevState) { //(This function is executed after the component has FINISHED rendering)
-    if (prevState.popUpWindowsClosed !== this.state.popUpWindowsClosed) {
-      this.setState({
-        popUpWindowsClosed: true,
-      })
-    }
+  componentDidUpdate(){
+    console.log('ratom')
   }
   render() {
     return <ApolloProvider client={client}>
       <div className="App" onClick={(e) => {
-        if (!e.target.classList.contains("chcur")) {
-          this.setState({
-            popUpWindowsClosed: false
-          })
+        if(this.state.popUpWindowsClosed===false){
+          console.log('ogo')
+          this.setPopUpWindowsClosed(true);
         }
       }}>
         {!this.state.dataIsFetched && <Loading />}
-        {this.state.dataIsFetched && <Main popUpsClosed={this.state.popUpWindowsClosed} data={Object.entries(this.usableData)} />}
+        {this.state.dataIsFetched && <Main popUpsClosed={this.state.popUpWindowsClosed} setPopUpWindowsClosed={this.setPopUpWindowsClosed.bind(this)} data={Object.entries(this.usableData)} />}
       </div>
     </ApolloProvider>
   }

@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Raleway|Raleway:300,400,500,600,700");
+@import url("https://fonts.googleapis.com/css?family=Roboto|Roboto:300,400,500,600,700");
 
 body {
   margin: 0;
@@ -7,6 +8,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 
 :root {
@@ -25,6 +27,9 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+.App {
+  min-height: 100vh;
 }
 
 
@@ -192,6 +197,7 @@ main {
   justify-content: center;
   text-decoration: none;
   color: #1D1F22;
+  margin: auto;
 }
 
 
@@ -427,16 +433,21 @@ header {
 }
 
 .product-detailed-display {
-  padding: 0 100px;
+  padding: 0 300px;
   padding-top: 160px;
   display: flex;
+  justify-content: space-between;
 }
 
 .selection-image-wrapper {
   height: 80px;
   width: 80px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
-
+.selection-image-wrapper:hover {
+  transform: scale(1.1);
+}
 .selection-image-wrapper img {
   object-fit: cover;
   height: 100%;
@@ -449,7 +460,7 @@ header {
 }
 
 .focused-image-wrapper {
-  height: 500px;
+  height: 550px;
   width: 600px;
   margin-left: 40px;
   margin-right: 100px;
@@ -458,7 +469,7 @@ header {
 .focused-image-wrapper img {
   height: 100%;
   width: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .attributes-product-name {
@@ -474,26 +485,130 @@ header {
 .product-attributes {
   display: flex;
   flex-direction: column;
+  width: 300px;
 }
 
 .attribute-wrapper {
-  padding: 40px 0;
+  padding: 20px 0;
+  min-width: 250px;
 }
 
 .sizes-colors {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  column-gap: 12px;
-  row-gap: 12px;
+  display: flex;
+  flex-wrap: wrap;
   margin-top: 5px;
 }
 
 .price-cont div:not(:last-child) {
   margin-bottom: 10px;
 }
-
-.testerdiv {
+.generalAttribute {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.mostAttribute {
   width: 64px;
   height: 45px;
-  background-color: deeppink;
+  border: 1px solid #1D1F22;
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.selectedMostAttribute, .mostAttribute:hover {
+  background-color: #1D1F22 !important; 
+  color: white !important;
+}
+
+.colorAttribute {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  outline: 33px;
+  cursor: pointer;
+  box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.2);
+}
+.colorAttribute:hover:after, .colorAttribute:hover:before {
+  opacity: 1;
+}
+.colorAttribute:hover {
+  /* border: 1px solid white; */
+}
+.colorAttribute::after {
+  opacity: 0;
+  transition: all 0.2s;
+  content: '';
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background-color: #5ECE7B;
+  z-index: -2;
+}
+.colorAttribute::before {
+  opacity: 0;
+  transition: all 0.2s;
+  content: '';
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background-color: #ffffff;
+  z-index: -1;
+}
+.selectedColorAttribute::after, .selectedColorAttribute::before {
+  opacity: 1;
+} 
+.add-to-cart {
+  width: 290px;
+  height: 50px;
+  background-color: #5ECE7B;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+.product-description {
+  font-size: 16px;
+  max-width: 90%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+  max-height: 250px;
+  overflow-y: scroll; 
+}
+.product-description * {
+  font-family: 'Roboto' !important;
+}
+.product-description::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.add-to-cart:hover {
+  background-color: #15d649;
+}
+@media only screen and (max-width: 2000px) {
+  .product-detailed-display {
+    padding-left: 200px;
+    padding-right: 200px;
+  }
+}
+@media only screen and (max-width: 1600px) {
+  .product-detailed-display {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
 }

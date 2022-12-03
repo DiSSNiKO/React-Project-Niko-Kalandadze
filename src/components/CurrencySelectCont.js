@@ -14,10 +14,14 @@ class CurrencySelectCont extends React.Component {
                 neededClasses: ['select-currency-invisible', 'select-currency-label-invisible', '']
             });
         } else {
-            this.setState({
-                dropboxVisible: true,
-                neededClasses: ['select-currency-visible', 'select-currency-label-visible', 'selectArrowOn']
-            });
+            if(this.props.popUpsClosed===true){
+                this.setState({    
+                    dropboxVisible: true,
+                    neededClasses: ['select-currency-visible', 'select-currency-label-visible', 'selectArrowOn']
+                });
+                this.props.setPopUpWindowsClosed(false);
+                console.log('baaaah')
+            }
         }
     }
     handleCurrencyChange = (e) => {
@@ -28,8 +32,8 @@ class CurrencySelectCont extends React.Component {
             neededClasses: ['select-currency-invisible', 'select-currency-label-invisible', '']
         });
     }
-    componentDidUpdate() {
-        if (!this.props.popUpsClosed) {
+    componentDidUpdate(prevProps) {
+        if (this.props.popUpsClosed && prevProps.popUpsClosed!==this.props.popUpsClosed) {
             this.setState({
                 dropboxVisible: false,
                 neededClasses: ['select-currency-invisible', 'select-currency-label-invisible', '']
