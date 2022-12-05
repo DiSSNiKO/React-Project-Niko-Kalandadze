@@ -47,7 +47,15 @@ code {
 .testerdiv {
   
 }
-
+button, input[type="submit"], input[type="reset"] {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
 
 
 /* LOADING */
@@ -97,7 +105,7 @@ code {
   animation-delay: -0.3s;
   top: 7px;
   left: 37px;
-}
+} 
 
 .lds-default div:nth-child(5) {
   animation-delay: -0.4s;
@@ -471,6 +479,17 @@ header {
   justify-content: space-between;
   padding: 0 16px;
 }
+.cart-item-attributes {
+  display: flex;
+  max-height: 100%;
+  overflow-y: scroll;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cart-item-attributes::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
 .total-price-style {
   font-size: 16px;
   font-weight: 500;
@@ -498,12 +517,48 @@ header {
 .cart-item-wrapper {
   width: 100%;
   height: 190px;
-  background-color: darkgray;
+  display: flex;
+  justify-content: space-between;
+  /* background-color: darkgray; */
+}
+.increase-decrease button {
+  height: 24px;
+  width: 24px;
+  font-size: var(--fontsizemedium);
+  border: 1px solid #1D1F22;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.increase-decrease {
+  display: flex;
+  margin-right: 10px;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+.buy-this-many {
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
 }
 .cart-item-wrapper:not(:last-child){
   margin-bottom: 40px;
 }
-.
+.cart-item-image {
+  width: 120px;
+  height: 190px;
+  overflow: hidden;
+}
+.cart-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cart-item-title {
+  font-size: 16px;
+  font-weight: 400;
+}
 /* PRODUCT PAGE */
 
 .image-selection {
@@ -561,14 +616,12 @@ header {
   object-fit: cover;
 }
 
-.attributes-product-name {
-  font-weight: 600;
+.big-title {
   font-size: 30px;
 }
-
 .attributes-product-name {
-  font-weight: 400;
-  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
 .product-attributes {
@@ -577,9 +630,11 @@ header {
   width: 300px;
 }
 
-.attribute-wrapper {
-  padding: 20px 0;
+
+
+.attribute-wrapper-product-page {
   min-width: 250px;
+  padding: 10px 0;
 }
 .attribute-wrapper-small {
   width: 100%;
@@ -592,23 +647,31 @@ header {
 }
 
 .price-cont div:not(:last-child) {
-  margin-bottom: 10px;
+  margin: 10px 0;
 }
 .generalAttribute {
   margin-right: 10px;
   margin-bottom: 10px;
 }
 .mostAttribute {
-  width: 64px;
-  height: 45px;
   border: 1px solid #1D1F22;
-  font-size: 16px;
   font-weight: 400;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   transition: all 0.2s;
+}
+.mostAttributeSmall {
+  width: fit-content;
+  height: fit-content;
+  padding: 3px;
+  font-size: 14px;
+}
+.mostAttributeBig {
+  width: 64px;
+  height: 45px;
+  font-size: 16px;
 }
 .selectedMostAttribute, .mostAttribute:hover {
   background-color: #1D1F22 !important; 
@@ -617,11 +680,17 @@ header {
 
 .colorAttribute {
   position: relative;
-  width: 32px;
-  height: 32px;
   outline: 33px;
   cursor: pointer;
   box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.2);
+}
+.colorAttributeBig {
+  width: 32px;
+  height: 32px;
+}
+.colorAttributeSmall {
+  width: 16px;
+  height: 16px;
 }
 .colorAttribute:hover:after, .colorAttribute:hover:before {
   opacity: 1;
@@ -634,8 +703,6 @@ header {
   transition: all 0.2s;
   content: '';
   position: absolute;
-  width: 35px;
-  height: 35px;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
@@ -647,14 +714,29 @@ header {
   transition: all 0.2s;
   content: '';
   position: absolute;
-  width: 34px;
-  height: 34px;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
   background-color: #ffffff;
   z-index: -1;
 }
+.colorAttributeBig::before {
+  width: 34px;
+  height: 34px;
+}
+.colorAttributeBig::after {
+  width: 35px;
+  height: 35px;
+}
+.colorAttributeSmall::before {
+  width: 17px;
+  height: 17px;
+}
+.colorAttributeSmall::after {
+  width: 18px;
+  height: 18px;
+}
+
 .selectedColorAttribute::after, .selectedColorAttribute::before {
   opacity: 1;
 } 
@@ -668,9 +750,14 @@ header {
   cursor: pointer;
   transition: all 0.2s;
 }
+.not-in-stock {
+  background-color: gray !important;
+  pointer-events: none;
+}
 .add-to-cart {
   width: 290px;
   height: 50px;
+  margin: 20px 0;
 }
 .product-description {
   font-size: 16px;
