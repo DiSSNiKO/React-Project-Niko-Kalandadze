@@ -20,7 +20,6 @@ class CurrencySelectCont extends React.Component {
                     neededClasses: ['select-currency-visible', 'select-currency-label-visible', 'selectArrowOn']
                 });
                 this.props.setPopUpWindowsClosed(false);
-                console.log('baaaah')
             }
         }
     }

@@ -1,5 +1,6 @@
 import React from "react";
 import CurrencySelectCont from "./CurrencySelectCont";
+import CartOverlay from './CartOverlay';
 import { Link } from 'react-router-dom';
 class Navbar extends React.Component {
     constructor() {
@@ -20,7 +21,7 @@ class Navbar extends React.Component {
             <img src="/images/a-logo.svg" alt="logo" id="central-logo" />
             <div className="cart-currency-func">
                 <CurrencySelectCont popUpsClosed={this.props.popUpsClosed} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed} currentCurrency={this.props.currentCurrency} changeCurrency={this.props.changeCurrency} />
-                <img src="/images/Empty Cart.svg" alt="" id="cart-button" />
+                <CartOverlay popUpsClosed={this.props.popUpsClosed} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed} />
             </div>
         </header>
     }

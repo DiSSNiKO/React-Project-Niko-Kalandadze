@@ -84,7 +84,7 @@ class App extends React.Component {
     });
   }
   componentDidUpdate(){
-    console.log('ratom')
+    console.log('App re-rendered')
   }
   render() {
     return <ApolloProvider client={client}>

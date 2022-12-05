@@ -9,9 +9,6 @@ class ProductDetailedDisplay extends React.Component {
             specificData:{},
             initialRender: true,
             focusedImage: null,
-            allSelectedAttributes: {
-
-            }
         }
     }
     setSpecificData(){

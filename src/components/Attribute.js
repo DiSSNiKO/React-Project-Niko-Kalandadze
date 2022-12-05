@@ -17,7 +17,7 @@ class Attribute extends React.Component {
         this.props.type==="Color" ? this.colorStyle=this.props.attribute['value']:this.colorStyle="white";
     }
     render() {
-        return <div style={{backgroundColor: this.colorStyle}} className={`${this.attributeStyles[this.props.type][0]} generalAttribute ${this.props.usableKey===this.props.isSelected ? this.attributeStyles[this.props.type][1]:""}`} onClick={(e)=>{
+        return <div style={{backgroundColor: this.colorStyle}} className={`${this.attributeStyles[this.props.type][0]} generalAttribute ${this.props.usableKey===this.props.isSelected ? this.attributeStyles[this.props.type][1]:""}`} onClick={()=>{
             this.props.setSelected(this.props.usableKey);
             this.props.changeAllSelectedAttributes(this.props.type, this.props.attribute['value']);
         }}>

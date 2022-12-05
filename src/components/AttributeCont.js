@@ -14,8 +14,8 @@ class AttributeCont extends React.Component {
         })
     }
     render() {
-        return <div className='attribute-wrapper'>
-            <div className='generic-title-small font-weight-700'>{this.props.item['name'].toUpperCase()}:</div>
+        return <div className={this.props.location==='productPage'?"attribute-wrapper":"attribute-wrapper-small"}>
+            <div className={this.props.location==='productPage'?"generic-title-small":"cart-item-title"}>{this.props.item['name'].toUpperCase()}:</div>
             <div className='sizes-colors'>
                 {this.props.item["items"].map((attribute, index) => <Attribute changeAllSelectedAttributes={this.props.changeAllSelectedAttributes} setSelected={this.setSelected.bind(this)} attribute={attribute} type={this.props.item['id']} key={index} usableKey={index} isSelected={this.state.isSelected}/>)}
             </div>
