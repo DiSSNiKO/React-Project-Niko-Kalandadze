@@ -9,7 +9,13 @@ class Main extends React.Component {
         super();
         this.state = {
             currenctCategory: 'all',
-            currentCurrency: '$USD'
+            currentCurrency: '$USD',
+            cartItemObjects : []
+        }
+        this.addCartItem = (newCartItem) => {
+            this.setState((prevState)=>({
+                cartItemObjects: [...prevState.cartItemObjects, newCartItem]
+            }));
         }
         this.changeCategory = (newCategory) => {
             
@@ -23,17 +29,18 @@ class Main extends React.Component {
             });
         }
     }
-    componentDidMount(){
-        // console.log(this.props.data)
+    componentDidUpdate(){
+        console.log(this.state.cartItemObjects)
     }
     render() {
         return <main className="MainCont">
             <Navbar popUpsClosed={this.props.popUpsClosed} changeCategory={this.changeCategory}
                 currentCategory={this.state.currenctCategory} currentCurrency={this.state.currentCurrency}
-                changeCurrency={this.changeCurrency} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed}/>
+                changeCurrency={this.changeCurrency} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed}
+                cartItemObjects={this.state.cartItemObjects}/>
             <Routes>
                 {["/", "all", "clothes", "tech"].map((path, index) => <Route path={path} key={index} element={<ProductDisplay data={this.props.data} currentCategory={this.state.currenctCategory} currentCurrency={this.state.currentCurrency} />} />)}
-                <Route path="/product/:id" element={<ProductDetailedDisplay data={this.props.data} currentCurrency={this.state.currentCurrency} />}/>
+                <Route path="/product/:id" element={<ProductDetailedDisplay data={this.props.data} currentCurrency={this.state.currentCurrency} addCartItem={this.addCartItem.bind(this)}/>}/>
             </Routes>
         </main>
     }

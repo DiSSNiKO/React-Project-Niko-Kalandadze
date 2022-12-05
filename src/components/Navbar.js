@@ -21,7 +21,7 @@ class Navbar extends React.Component {
             <img src="/images/a-logo.svg" alt="logo" id="central-logo" />
             <div className="cart-currency-func">
                 <CurrencySelectCont popUpsClosed={this.props.popUpsClosed} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed} currentCurrency={this.props.currentCurrency} changeCurrency={this.props.changeCurrency} />
-                <CartOverlay popUpsClosed={this.props.popUpsClosed} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed} />
+                <CartOverlay  popUpsClosed={this.props.popUpsClosed} cartItemObjects={this.props.cartItemObjects} currentCurrency={this.props.currentCurrency} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed} />
             </div>
         </header>
     }

@@ -24,7 +24,7 @@ class ProductDetailedDisplay extends React.Component {
     render() {
         return <div>
             {this.state.initialRender && <div></div>}
-            {!this.state.initialRender && <ProductPageActual data={this.state.specificData} currentCurrency={this.props.currentCurrency}/>} 
+            {!this.state.initialRender && <ProductPageActual addCartItem={this.props.addCartItem} data={this.state.specificData} currentCurrency={this.props.currentCurrency}/>} 
         </div>
     }
 }
