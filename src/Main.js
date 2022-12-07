@@ -29,9 +29,6 @@ class Main extends React.Component {
             });
         }
     }
-    componentDidUpdate(){
-        console.log(this.state.cartItemObjects)
-    }
     render() {
         return <main className="MainCont">
             <Navbar popUpsClosed={this.props.popUpsClosed} changeCategory={this.changeCategory}
@@ -40,7 +37,7 @@ class Main extends React.Component {
                 cartItemObjects={this.state.cartItemObjects}/>
             <Routes>
                 {["/", "all", "clothes", "tech"].map((path, index) => <Route path={path} key={index} element={<ProductDisplay data={this.props.data} currentCategory={this.state.currenctCategory} currentCurrency={this.state.currentCurrency} />} />)}
-                <Route path="/product/:id" element={<ProductDetailedDisplay data={this.props.data} currentCurrency={this.state.currentCurrency} addCartItem={this.addCartItem.bind(this)}/>}/>
+                <Route path="/product/:id" element={<ProductDetailedDisplay data={this.props.data} currentCurrency={this.state.currentCurrency} cartItemObjects={this.state.cartItemObjects} addCartItem={this.addCartItem.bind(this)}/>}/>
             </Routes>
         </main>
     }

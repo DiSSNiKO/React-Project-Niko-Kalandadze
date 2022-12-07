@@ -356,8 +356,26 @@ header {
   width: auto;
   margin: auto 0;
   cursor: pointer;
+  
 }
 
+.total-items-in-cart {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  font-family: 'Roboto', sans-serif;
+  pointer-events: none;
+  color: white;
+  background-color: #1D1F22;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: -10px;
+  right: -10px;
+  border-radius: 50%;
+  transition: all 0.25s
+}
 
 .change-currency {
   margin: auto 0;
@@ -485,6 +503,9 @@ header {
   overflow-y: scroll;
   flex-direction: column;
   justify-content: space-between;
+}
+.cart-item-info {
+  margin-bottom: 10px;
 }
 .cart-item-attributes::-webkit-scrollbar {
   width: 0;
@@ -673,11 +694,14 @@ header {
   height: 45px;
   font-size: 16px;
 }
-.selectedMostAttribute, .mostAttribute:hover {
+.static-attribute {
+  cursor: default !important;
+  
+}
+.selectedMostAttribute, .mostAttribute:not(.static-attribute):hover {
   background-color: #1D1F22 !important; 
   color: white !important;
 }
-
 .colorAttribute {
   position: relative;
   outline: 33px;
@@ -692,7 +716,7 @@ header {
   width: 16px;
   height: 16px;
 }
-.colorAttribute:hover:after, .colorAttribute:hover:before {
+.colorAttribute:not(.static-attribute):hover:after, .colorAttribute:not(.static-attribute):hover:before {
   opacity: 1;
 }
 .colorAttribute:hover {
@@ -749,6 +773,10 @@ header {
   border: none;
   cursor: pointer;
   transition: all 0.2s;
+}
+.in-cart {
+  background-color: salmon !important;
+  cursor: default !important;
 }
 .not-in-stock {
   background-color: gray !important;

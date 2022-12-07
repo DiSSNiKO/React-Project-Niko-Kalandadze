@@ -5,11 +5,11 @@ class AttributeForOverlay extends React.Component {
     constructor(){
         super();
         this.attributeStyles = {
-            Size: [`mostAttribute mostAttributeSmall`,'selectedMostAttribute'],
-            Color: ['colorAttribute colorAttributeSmall', 'selectedColorAttribute'],
-            Capacity: [`mostAttribute mostAttributeSmall`,'selectedMostAttribute'],
-            "With USB 3 ports": [`mostAttribute mostAttributeSmall`,'selectedMostAttribute'],
-            "Touch ID in keyboard": [`mostAttribute mostAttributeSmall`,'selectedMostAttribute'],
+            Size: [`mostAttribute mostAttributeSmall cart-overlay-part`,'selectedMostAttribute'],
+            Color: ['colorAttribute colorAttributeSmall cart-overlay-part', 'selectedColorAttribute'],
+            Capacity: [`mostAttribute mostAttributeSmall cart-overlay-part`,'selectedMostAttribute'],
+            "With USB 3 ports": [`mostAttribute mostAttributeSmall cart-overlay-part`,'selectedMostAttribute'],
+            "Touch ID in keyboard": [`mostAttribute mostAttributeSmall cart-overlay-part`,'selectedMostAttribute'],
         }
         this.colorStyle = ''; 
     }
@@ -17,7 +17,7 @@ class AttributeForOverlay extends React.Component {
         this.props.type==="Color" ? this.colorStyle=this.props.attribute['value']:this.colorStyle="white";
     }
     render() {
-        return <div style={{backgroundColor: this.colorStyle}} className={`${this.attributeStyles[this.props.type][0]} generalAttribute ${this.props.usableKey===this.props.isSelected ? this.attributeStyles[this.props.type][1]:""}`}>
+        return <div style={{backgroundColor: this.colorStyle}} className={`cart-overlay-part ${this.attributeStyles[this.props.type][0]} static-attribute generalAttribute ${this.props.highlightedAttributes[this.props.type]===this.props.attribute['value'] ? this.attributeStyles[this.props.type][1]:""}`}>
             {this.props.type!="Color" && this.props.attribute["value"]}
         </div>
     }

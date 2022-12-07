@@ -89,9 +89,12 @@ class App extends React.Component {
   render() {
     return <ApolloProvider client={client}>
       <div className="App" onClick={(e) => {
-        if(this.state.popUpWindowsClosed===false){
-          console.log('ogo')
-          this.setPopUpWindowsClosed(true);
+        const etarget = e.target;
+        if(!etarget.classList.contains("cart-overlay-part")){
+          if(this.state.popUpWindowsClosed===false){
+            console.log('ogo')
+            this.setPopUpWindowsClosed(true);
+          }
         }
       }}>
         {!this.state.dataIsFetched && <Loading />}
