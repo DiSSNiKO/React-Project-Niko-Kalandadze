@@ -1,17 +1,17 @@
 import React from 'react';
 //attribute object has a key of value and displayValue
 
-class AttributeForOverlay extends React.Component {
+class AttributeForCheckout extends React.Component {
     constructor(){
         super();
         this.state = {
             colorStyle : '',
             attributeStyles : {
-                Size: [`mostAttribute mostAttributeSmall cart-overlay-part`,'selectedMostAttribute'],
-                Color: ['colorAttribute colorAttributeSmall cart-overlay-part', 'selectedColorAttribute'],
-                Capacity: [`mostAttribute mostAttributeSmall cart-overlay-part`,'selectedMostAttribute'],
-                "With USB 3 ports": [`mostAttribute mostAttributeSmall cart-overlay-part`,'selectedMostAttribute'],
-                "Touch ID in keyboard": [`mostAttribute mostAttributeSmall cart-overlay-part`,'selectedMostAttribute'],
+                Size: [`mostAttribute mostAttributeBig`,'selectedMostAttribute'],
+                Color: ['colorAttribute colorAttributeBig', 'selectedColorAttribute'],
+                Capacity: [`mostAttribute mostAttributeBig`,'selectedMostAttribute'],
+                "With USB 3 ports": [`mostAttribute mostAttributeBig`,'selectedMostAttribute'],
+                "Touch ID in keyboard": [`mostAttribute mostAttributeBig`,'selectedMostAttribute'],
             }
         } 
     }
@@ -24,4 +24,4 @@ class AttributeForOverlay extends React.Component {
         </div>
     }
 }
-export default AttributeForOverlay;
+export default AttributeForCheckout;

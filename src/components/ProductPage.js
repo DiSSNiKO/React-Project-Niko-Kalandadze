@@ -12,7 +12,6 @@ class ProductDetailedDisplay extends React.Component {
         }
     }
     setSpecificData(){
-        // console.log(findSpecificData(this.props.data))
         this.setState({
             initialRender:false,
             specificData: findSpecificData(this.props.data)

@@ -19,6 +19,7 @@ class ProductDisplay extends React.Component {
                         if (item[1]['category'] === this.props.currentCategory) {
                             return <ProductListing key={index}
                                 id={item[0]}
+                                inStock={item[1]['inStock']}
                                 title={item[1]['name']}
                                 thumbnail={item[1]['gallery'][0]}
                                 brand={item[1]['brand']}
@@ -28,6 +29,7 @@ class ProductDisplay extends React.Component {
                     } else {
                         return <ProductListing key={index}
                             id={item[0]}
+                            inStock={item[1]['inStock']}
                             title={item[1]['name']}
                             thumbnail={item[1]['gallery'][0]}
                             brand={item[1]['brand']}

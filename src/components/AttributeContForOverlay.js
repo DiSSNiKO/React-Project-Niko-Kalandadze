@@ -14,8 +14,8 @@ class AttributeContForOverlay extends React.Component {
         })
     }
     render() {
-        return <div className={`${this.props.location==='productPage'?"attribute-wrapper-product-page":"attribute-wrapper-small"} cart-overlay-part`}>
-            <div className={`${this.props.location==='productPage'?"generic-title-small":"cart-item-title"} cart-overlay-part`}>{this.props.item['name'].toUpperCase()}:</div>
+        return <div className={`attribute-wrapper-small cart-overlay-part`}>
+            <div className={`cart-item-title cart-overlay-part`}>{this.props.item['name'].toUpperCase()}:</div>
             <div className='sizes-colors cart-overlay-part'>
                 {this.props.item["items"].map((attribute, index) => <AttributeForOverlay highlightedAttributes={this.props.highlightedAttributes} attribute={attribute} type={this.props.item['id']} key={index} />)}
             </div>

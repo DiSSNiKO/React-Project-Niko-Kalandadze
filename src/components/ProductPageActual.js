@@ -2,6 +2,9 @@ import React from 'react';
 import SelectionImage from './SelectionImage';
 import exchangeRates from '../utils/exchangeRates';
 import AttributeCont from './AttributeCont';
+import objectsIdentical from '../utils/objectsIdentical';
+import objectToString from '../utils/objectToString';
+
 class ProductPageActual extends React.Component {
     constructor() {
         super();
@@ -27,6 +30,7 @@ class ProductPageActual extends React.Component {
         });
     }
     componentDidMount() {
+        this.cartItemIdentifier = `${this.props.data.name}${this.props.data.brand}${objectToString(this.props.data.name)}`;
         let attributesStateObject = {};
         if(this.props.data['attributes']){
             this.props.data["attributes"].forEach(element => {
@@ -40,6 +44,7 @@ class ProductPageActual extends React.Component {
         
     }
     componentDidUpdate(prevProps, prevState){
+        this.cartItemIdentifier = `${this.props.data.name}${this.props.data.brand}${objectToString(this.state.allSelectedAttributes)}`;
         let alreadyExists = false;
         const toAdd = 
         {
@@ -50,18 +55,12 @@ class ProductPageActual extends React.Component {
             gallery: this.props.data['gallery'],
             highlightedAttributes: this.state.allSelectedAttributes
         };
-        const attributeCount = Object.keys(toAdd.highlightedAttributes).length;
-        let similarityIndex = 0;
         if(this.props.cartItemObjects.length!=0){
-            this.props.cartItemObjects.forEach((cartItemObject)=>{
-                similarityIndex = 0;
-                for(const key of Object.keys(cartItemObject.highlightedAttributes)){
-                    if(cartItemObject.highlightedAttributes[key]===toAdd.highlightedAttributes[key]){
-                        similarityIndex+=1;
+            Object.keys(this.props.cartItemObjects).forEach((cartItemKey)=>{
+                if(toAdd.name===this.props.cartItemObjects[cartItemKey].name){ //to better performance, only compare product objects for the same product 
+                    if(objectsIdentical(toAdd.highlightedAttributes, this.props.cartItemObjects[cartItemKey].highlightedAttributes)===true){
+                        alreadyExists=true;
                     }
-                }
-                if(similarityIndex===attributeCount){
-                    alreadyExists=true;
                 }
             })
         }
@@ -89,7 +88,7 @@ class ProductPageActual extends React.Component {
             </div>
             <div className="product-attributes">
                 <div className='attributes-product-name big-title'>{this.props.data.name}</div>
-                <div className='attributes-product-title'>{this.props.data.brand}</div>
+                <div className='attributes-product-title big-title'>{this.props.data.brand}</div>
                 {this.props.data["attributes"].length != 0 && this.props.data["attributes"].map((item, index) => <AttributeCont changeAllSelectedAttributes={this.changeAllSelectedAttributes.bind(this)} location={"productPage"} item={item} key={index * 2} />)}
                 <div className='price-cont attribute-wrapper'>
                     <div className='generic-title-small font-weight-700'>PRICE:</div>
@@ -99,14 +98,18 @@ class ProductPageActual extends React.Component {
                 <button className={`add-to-cart green-button-style ${this.state.existantCombination ? "in-cart":""} ${this.props.data['inStock'] ? "":"not-in-stock"}`} 
                 onClick={()=>{
                     if(!this.state.existantCombination){
-                        this.props.addCartItem({
-                            attributes:this.props.data["attributes"],
-                            brand:this.props.data["brand"],
-                            name:this.props.data['name'],
-                            price:this.props.data['prices'][0]['amount'], //price in dollars
-                            gallery: this.props.data['gallery'],
-                            highlightedAttributes: this.state.allSelectedAttributes
-                        });
+                        this.props.addCartItem(
+                            {
+                                attributes:this.props.data["attributes"],
+                                brand:this.props.data["brand"],
+                                name:this.props.data['name'], //remove by matching a string made of name+brand+every selected attribute and removing it from in cart array
+                                price:this.props.data['prices'][0]['amount'], //price in dollars
+                                gallery: this.props.data['gallery'],
+                                highlightedAttributes: this.state.allSelectedAttributes,
+                                amount: 1
+                            },
+                            this.cartItemIdentifier
+                        );
                     }
                 }}>{this.props.data['inStock'] ? `${this.state.existantCombination ? "ALREADY IN CART":"ADD TO CART"}`:"OUT OF STOCK"}</button>
                 <div className='product-description' dangerouslySetInnerHTML={{__html: this.props.data.description}}></div>

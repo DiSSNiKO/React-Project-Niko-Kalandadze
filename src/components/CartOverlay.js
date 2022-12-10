@@ -8,21 +8,7 @@ class CartOverlay extends React.Component {
         super();
         this.state = {
             cartOverlayDisplayed: false,
-            totalPriceOfCartItems: 0, // in USD
-            totalItems: 0 
         }
-    }
-    increaseTotalPriceOfCartItems(price){
-        this.setState((prevState)=>({
-            totalPriceOfCartItems: prevState.totalPriceOfCartItems + price,
-            totalItems: prevState.totalItems + 1
-        }));
-    }
-    decreaseTotalPriceOfCartItems(price){
-        this.setState((prevState)=>({
-            totalPriceOfCartItems: prevState.totalPriceOfCartItems - price,
-            totalItems: prevState.totalItems - 1
-        }));
     }
     handleClick(){
             if(this.state.cartOverlayDisplayed){
@@ -47,14 +33,14 @@ class CartOverlay extends React.Component {
         return <div className="cart-button-overlay-wrapper cart-overlay-part">
             <div style={{position:"relative"}}>
                 <img src="/images/Empty Cart.svg" alt="" id="cart-button" onClick={this.handleClick.bind(this)}/>
-                <div className={`${this.state.totalItems===0 && "no-display"} total-items-in-cart`}>{this.state.totalItems<100?this.state.totalItems:99}</div>
+                <div className={`${this.props.totalItems===0 && "no-display"} total-items-in-cart`}>{this.props.totalItems<100?this.props.totalItems:99}</div>
             </div>
             <div className={`cart-overlay ${!this.state.cartOverlayDisplayed ? "no-display":""} cart-overlay-part`}>
-                <span className="my-bag cart-overlay-part"><strong className='cart-overlay-part'>My Bag,</strong> {this.props.cartItemObjects.length} items</span>
-                <ProductsInCart totalPriceOfCartItems={this.state.totalPriceOfCartItems} increaseTotalPriceOfCartItems={this.increaseTotalPriceOfCartItems.bind(this)} decreaseTotalPriceOfCartItems={this.decreaseTotalPriceOfCartItems.bind(this)} currentCurrency={this.props.currentCurrency} cartItemObjects={this.props.cartItemObjects}/>
+                <span className="my-bag cart-overlay-part"><strong className='cart-overlay-part'>My Bag,</strong> {this.props.totalItems} items</span>
+                <ProductsInCart cartItemObjectKeys={this.props.cartItemObjectKeys}  changeSpecificItemAmount={this.props.changeSpecificItemAmount} totalPriceOfCartItems={this.props.totalPriceOfCartItems} totalItems={this.props.totalItems} rebuildCart={this.props.rebuildCart} increaseTotalPriceOfCartItems={this.props.increaseTotalPriceOfCartItems} decreaseTotalPriceOfCartItems={this.props.decreaseTotalPriceOfCartItems} currentCurrency={this.props.currentCurrency} cartItemObjects={this.props.cartItemObjects}/>
                 <div className='cart-overlay-wrapper cart-overlay-part'>
                     <span className='total-price-style cart-overlay-part'>Total</span>
-                    <span className="total-price total-price-style cart-overlay-part">{this.props.currentCurrency[0]}{Number(this.state.totalPriceOfCartItems*exchangeRates[this.props.currentCurrency]).toFixed(2)}</span>
+                    <span className="total-price total-price-style cart-overlay-part">{this.props.currentCurrency[0]}{Number(this.props.totalPriceOfCartItems*exchangeRates[this.props.currentCurrency]).toFixed(2)}</span>
                 </div>
                 <div className="cart-overlay-wrapper cart-overlay-part">
                     <Link to={"/checkout"} className="to-checkout to-checkout-bag">VIEW BAG</Link>
