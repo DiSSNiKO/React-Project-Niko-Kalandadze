@@ -30,10 +30,13 @@ class App extends React.Component {
     super();
     this.state = {
       popUpWindowsClosed: true,
-      dataIsFetched: false
+      dataIsFetched: false,
+      productsFetched: false
     }
     this.dataProgress = 0;
     this.usableData = {};
+    this.betterPrices = {};
+    this.betterCurrencyObject = {};
   }
   setPopUpWindowsClosed(val){
     this.setState({
@@ -43,6 +46,7 @@ class App extends React.Component {
   componentDidMount() {
     const amountOfItems = productIds.length;
     productIds.forEach((itemId) => {
+      let betterPricesObject = {};
       this.fetchedData = client.query({
         query: gql`
         {
@@ -73,18 +77,43 @@ class App extends React.Component {
           }
         }`
       }).then(result => {
+        result.data.product.prices.forEach(priceArr => {
+          betterPricesObject[priceArr["currency"]['label']]= priceArr['amount']
+        });
         this.usableData[`${result.data.product.id}`] = result.data.product;
+        this.betterPrices[result.data.product.id] = betterPricesObject
         this.dataProgress++;
-        if (this.dataProgress === amountOfItems) {
+        if(this.dataProgress===amountOfItems){
           this.setState({
-            dataIsFetched: true
-          });
+            productsFetched:true
+          })
         }
       });
     });
   }
   componentDidUpdate(){
-    console.log('App re-rendered')
+    if(this.state.productsFetched && this.state.dataIsFetched===false){
+      this.fetchedData = client.query({
+        query: gql`
+        {
+          currencies {
+            label
+            symbol
+          }
+        }
+        `
+      }).then(result => {
+        result.data.currencies.forEach((curObject)=>{
+          this.betterCurrencyObject[curObject.label]={
+            'label':curObject.label,
+            'symbol':curObject.symbol
+          }
+        });
+        this.setState({
+          dataIsFetched: true
+        });
+      })
+    }
   }
   render() {
     return <ApolloProvider client={client}>
@@ -92,13 +121,12 @@ class App extends React.Component {
         const etarget = e.target;
         if(!etarget.classList.contains("cart-overlay-part")){
           if(this.state.popUpWindowsClosed===false){
-            console.log('ogo')
             this.setPopUpWindowsClosed(true);
           }
         }
       }}>
         {!this.state.dataIsFetched && <Loading />}
-        {this.state.dataIsFetched && <Main popUpsClosed={this.state.popUpWindowsClosed} setPopUpWindowsClosed={this.setPopUpWindowsClosed.bind(this)} data={Object.entries(this.usableData)} />}
+        {this.state.dataIsFetched && <Main popUpsClosed={this.state.popUpWindowsClosed} setPopUpWindowsClosed={this.setPopUpWindowsClosed.bind(this)} data={Object.entries(this.usableData)} betterPrices={this.betterPrices} currencies={this.betterCurrencyObject} />}
       </div>
     </ApolloProvider>
   }

@@ -20,8 +20,9 @@ class Navbar extends React.Component {
             </div>
             <img src="/images/a-logo.svg" alt="logo" id="central-logo" />
             <div className="cart-currency-func">
-                <CurrencySelectCont popUpsClosed={this.props.popUpsClosed} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed} currentCurrency={this.props.currentCurrency} changeCurrency={this.props.changeCurrency} />
-                <CartOverlay increaseTotalPriceOfCartItems={this.props.increaseTotalPriceOfCartItems} decreaseTotalPriceOfCartItems={this.props.decreaseTotalPriceOfCartItems} 
+                <CurrencySelectCont changeTotalPriceOfCartItems={this.props.changeTotalPriceOfCartItems} currencies={this.props.currencies} popUpsClosed={this.props.popUpsClosed} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed} currentCurrency={this.props.currentCurrency} changeCurrency={this.props.changeCurrency} />
+                
+                <CartOverlay betterPrices={this.props.betterPrices} changeTotalPriceOfCartItems={this.props.changeTotalPriceOfCartItems} 
                 cartItemObjectKeys={this.props.cartItemObjectKeys} rebuildCart={this.props.rebuildCart} changeSpecificItemAmount={this.props.changeSpecificItemAmount} 
                 totalPriceOfCartItems={this.props.totalPriceOfCartItems} totalItems={this.props.totalItems} popUpsClosed={this.props.popUpsClosed} cartItemObjects={this.props.cartItemObjects} 
                 currentCurrency={this.props.currentCurrency} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed}

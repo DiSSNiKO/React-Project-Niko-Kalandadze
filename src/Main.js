@@ -10,13 +10,15 @@ class Main extends React.Component {
         super();
         this.state = {
             currenctCategory: 'all',
-            currentCurrency: '$USD',
+            currentCurrency: {
+                'label':'USD',
+                'symbol':'$'
+            },
             cartItemObjects : {},
-            totalPriceOfCartItems: 0, // in USD
+            totalPriceOfCartItems: 0.00, // in USD
             totalItems: 0 
         }
         this.addCartItem = (newCartItem, identifi) => {
-            console.log(this.state.cartItemObjects)
             this.setState((prevState)=>({
                 cartItemObjects: {...prevState.cartItemObjects, [`${identifi}`]:newCartItem}
             }));
@@ -34,7 +36,6 @@ class Main extends React.Component {
             });
         }
         this.changeCategory = (newCategory) => {
-            
             this.setState({
                 currenctCategory: newCategory
             });
@@ -45,38 +46,66 @@ class Main extends React.Component {
             });
         }
     }
-    increaseTotalPriceOfCartItems(price){
-        this.setState((prevState)=>({
-            totalPriceOfCartItems: prevState.totalPriceOfCartItems + price,
-            totalItems: prevState.totalItems + 1
-        }));
+    //and also total items
+    changeTotalPriceOfCartItems(){
+        let pricesum = 0;
+        let itemsum = 0;
+        const objectkeys = Object.keys(this.state.cartItemObjects);
+        objectkeys.forEach((key)=>{
+            pricesum+=this.props.betterPrices[this.state.cartItemObjects[key]["id"]][this.state.currentCurrency['label']]*this.state.cartItemObjects[key]["amount"];
+            itemsum+=this.state.cartItemObjects[key]["amount"];
+        });
+        this.setState({
+            totalPriceOfCartItems: Number(pricesum).toFixed(2),
+            totalItems: itemsum
+        });
     }
-    decreaseTotalPriceOfCartItems(price){
-        this.setState((prevState)=>({
-            totalPriceOfCartItems: Math.abs(prevState.totalPriceOfCartItems - price),
-            totalItems: prevState.totalItems - 1
-        }));
+    componentDidUpdate(prevProps, prevState){
+        if(Object.keys(this.state.cartItemObjects).length===0 && this.state.totalPriceOfCartItems!=0){
+            this.changeTotalPriceOfCartItems();
+        }
+        if(prevState.currentCurrency!=this.state.currentCurrency){
+            this.changeTotalPriceOfCartItems();
+        }
+        if(Object.keys(this.state.cartItemObjects).length!=Object.keys(prevState.cartItemObjects).length){
+            this.changeTotalPriceOfCartItems();
+        }
     }
     render() {
         return <main className="MainCont">
-            <Navbar popUpsClosed={this.props.popUpsClosed} changeCategory={this.changeCategory}
+            <Navbar popUpsClosed={this.props.popUpsClosed} currencies={this.props.currencies} changeCategory={this.changeCategory}
                 currentCategory={this.state.currenctCategory} currentCurrency={this.state.currentCurrency}
                 changeCurrency={this.changeCurrency} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed}
                 cartItemObjects={this.state.cartItemObjects} changeSpecificItemAmount={this.changeSpecificItemAmount.bind(this)}
                 rebuildCart={this.rebuildCart.bind(this)} cartItemObjectKeys={Object.keys(this.state.cartItemObjects)}
                 totalPriceOfCartItems={this.state.totalPriceOfCartItems} totalItems={this.state.totalItems}
-                increaseTotalPriceOfCartItems={this.increaseTotalPriceOfCartItems.bind(this)}
-                decreaseTotalPriceOfCartItems={this.decreaseTotalPriceOfCartItems.bind(this)}/>
+                changeTotalPriceOfCartItems={this.changeTotalPriceOfCartItems.bind(this)}
+                betterPrices={this.props.betterPrices}/>
             <Routes>
-                {["/", "all", "clothes", "tech"].map((path, index) => <Route path={path} key={index} element={<ProductDisplay data={this.props.data} currentCategory={this.state.currenctCategory} currentCurrency={this.state.currentCurrency} />} />)}
+                {["/", "all", "clothes", "tech"].map((path, index) => 
+                
+                <Route path={path} key={index} element={<ProductDisplay betterPrices={this.props.betterPrices} data={this.props.data} 
+                currentCategory={this.state.currenctCategory}
+                cartItemObjects={this.state.cartItemObjects}
+                currentCurrency={this.state.currentCurrency} 
+                addCartItem={this.addCartItem.bind(this)} 
+                cartItemObjectKeys={Object.keys(this.state.cartItemObjects)}
+                changeSpecificItemAmount={this.changeSpecificItemAmount.bind(this)}
+                changeTotalPriceOfCartItems={this.changeTotalPriceOfCartItems.bind(this)} />} />)}
+                
                 <Route path="/checkout" element={<Checkout 
+                betterPrices={this.props.betterPrices}
                 totalPriceOfCartItems={this.state.totalPriceOfCartItems} totalItems={this.state.totalItems}
-                increaseTotalPriceOfCartItems={this.increaseTotalPriceOfCartItems.bind(this)}
-                decreaseTotalPriceOfCartItems={this.decreaseTotalPriceOfCartItems.bind(this)}
+                changeTotalPriceOfCartItems={this.changeTotalPriceOfCartItems.bind(this)}
                 currentCurrency={this.state.currentCurrency}
                 rebuildCart={this.rebuildCart.bind(this)} changeSpecificItemAmount={this.changeSpecificItemAmount.bind(this)}
                 data={this.state.cartItemObjects} cartItemObjectKeys={Object.keys(this.state.cartItemObjects)} />}/>
-                <Route path="/product/:id" element={<ProductDetailedDisplay data={this.props.data} currentCurrency={this.state.currentCurrency} cartItemObjects={this.state.cartItemObjects} addCartItem={this.addCartItem.bind(this)}/>}/>
+                
+                <Route path="/product/:id" element={<ProductDetailedDisplay betterPrices={this.props.betterPrices} data={this.props.data}
+                currentCurrency={this.state.currentCurrency}
+                cartItemObjects={this.state.cartItemObjects}
+                addCartItem={this.addCartItem.bind(this)}/>}/>
+            
             </Routes>
         </main>
     }

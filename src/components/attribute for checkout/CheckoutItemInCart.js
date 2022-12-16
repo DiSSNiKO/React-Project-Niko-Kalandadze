@@ -1,30 +1,65 @@
 import React from 'react';
 import AttributeContForCheckout from './AttributeContForCheckout';
-import exchangeRates from '../../utils/exchangeRates';
 import objectToString from '../../utils/objectToString';
+
+
 
 class CheckoutItemInCart extends React.Component {
     constructor () {
         super();
+        this.state = {
+            imageChanged: false,
+            animImageCont: null,
+            imageChanged: false,
+            translatedBy: 0
+        }
         this.increaseAmount = () => {
             this.props.changeSpecificItemAmount(`${this.props.data.name}${this.props.data.brand}${objectToString(this.props.data.highlightedAttributes)}`,1)
         }
         this.decreaseAmount = () => {
             this.props.changeSpecificItemAmount(`${this.props.data.name}${this.props.data.brand}${objectToString(this.props.data.highlightedAttributes)}`,-1)
         }
-        this.state = {
-            displayRemovePopup : 'no-display'
-        };
+    }
+    handleImageChange = (isLeft)=>{
+        const lastImageIndex = this.props.data.gallery.length - 1;
+        if(isLeft){
+            if(this.state.translatedBy!=0){
+                this.setState(prevState => ({
+                    translatedBy: prevState.translatedBy + 100
+                }));
+            } else {
+                this.setState({
+                    translatedBy: lastImageIndex*-100
+                });
+            }
+        } else {
+            if(this.state.translatedBy!=lastImageIndex*-100){
+                this.setState(prevState => ({
+                    translatedBy: prevState.translatedBy - 100
+                }));
+            } else {
+                this.setState({
+                    translatedBy: 0
+                });
+            }
+        }
+        this.setState({
+            imageChanged: true
+        });
     }
     componentDidMount(){
-        if(this.props.data.amount===1){
+        if(this.props.data.gallery.length > 1){
             this.setState({
-                displayRemovePopup:""
-            })
-        } else {
+                animImageCont: document.querySelector(`.${(this.props.data.name + this.props.data.brand+ objectToString(this.props.data.highlightedAttributes)).replace(/ /g, '')}imij`)
+            });
+        }
+    }
+    componentDidUpdate(){
+        if(this.state.imageChanged===true){
+            this.state.animImageCont.style.transform = `translateX(${this.state.translatedBy.toString()}%)`;
             this.setState({
-                displayRemovePopup:"no-display  "
-            })
+                imageChanged: false
+            });
         }
     }
     render(){
@@ -32,7 +67,7 @@ class CheckoutItemInCart extends React.Component {
             <div>
                 <div className='attributes-product-name big-title'>{this.props.data['name']}</div>
                 <div className='attributes-product-brand big-title'>{this.props.data['brand']}</div>
-                <div className='generic-title-medium font-weight-700'>{this.props.currentCurrency[0]}{Number(this.props.data['price']*exchangeRates[this.props.currentCurrency]).toFixed(2)}</div>
+                <div className='generic-title-medium font-weight-700'>{this.props.currentCurrency['symbol']}{Number(this.props.betterPrices[this.props.data['id']][this.props.currentCurrency['label']]).toFixed(2)}</div>
                 {this.props.data['attributes'].length != 0 && this.props.data['attributes'].map((item, index) => <AttributeContForCheckout highlightedAttributes={this.props.data['highlightedAttributes']} item={item} key={index}/>)}
             </div>
             <div className='image-n-inc-dec' style={{display:"flex"}}>
@@ -44,16 +79,11 @@ class CheckoutItemInCart extends React.Component {
                             })
                         }
                         this.increaseAmount();
-                        this.props.increaseTotalPriceOfCartItems(this.props.data['price']);
+                        this.props.changeTotalPriceOfCartItems();
                     }}>+</button>
                     <div className='buy-this-many '>{this.props.data.amount}</div>
                     <div style={{position:"relative"}}>
                         <button className='decrease-amount check-increase-decrease' style={{marginBottom:"12px !important"}} onClick={()=>{
-                            if(this.props.data.amount===2){
-                                this.setState({
-                                    displayRemovePopup:""
-                                })
-                            }
                             if(this.props.data.amount>1){
                                 this.decreaseAmount();
                             } else if(this.props.data.amount===1){
@@ -64,14 +94,25 @@ class CheckoutItemInCart extends React.Component {
                                     }
                                 });
                                 this.props.rebuildCart(newCart);
+                                this.setState({
+                                    deleteOccured: true
+                                });
                             }
-                            this.props.decreaseTotalPriceOfCartItems(this.props.data['price']);
-                        }}>{this.state.displayRemovePopup ? "-":"x"}</button>
-                        <div className={`remove-from-cart ${this.state.displayRemovePopup}`}></div>
+                            this.props.changeTotalPriceOfCartItems();
+                        }}>{this.props.data.amount===1 ? "x":"-"}</button>
+                        <div className={`remove-from-cart ${this.props.data.amount===1 ? "":"no-display-opacity"}`}></div>
                     </div>
                 </div>
                 <div className='checkout-image-wrapper'>
-                    <img className='useful-image-style' src={this.props.data["gallery"][0]} alt="" />
+                    <div className={`checkout-item-focused-image-changer-wrapper ${this.props.data.gallery.length>1 ? '':'no-display'}`}>
+                        <button style={{marginRight:"10px"}} onClick={()=>{this.handleImageChange(true)}}>{'<'}</button>
+                        <button onClick={()=>{this.handleImageChange(false)}}>{'>'}</button>
+                    </div>
+                    <div className={`anim-image-cont ${(this.props.data.name + this.props.data.brand+ objectToString(this.props.data.highlightedAttributes)).replace(/ /g, '')}imij`}>
+                        {this.props.data.gallery.map((sors, index)=>{
+                        return <img key={index} className={`useful-image-style`} src={sors} alt=""/>
+                        })}
+                    </div>
                 </div>
             </div>
         </div>
