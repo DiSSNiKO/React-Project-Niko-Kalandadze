@@ -9,7 +9,7 @@ class Main extends React.Component {
     constructor() {
         super();
         this.state = {
-            currenctCategory: 'all',
+            currentCategory: 'all',
             currentCurrency: {
                 'label':'USD',
                 'symbol':'$'
@@ -37,13 +37,27 @@ class Main extends React.Component {
         }
         this.changeCategory = (newCategory) => {
             this.setState({
-                currenctCategory: newCategory
+                currentCategory: newCategory
             });
         }
         this.changeCurrency = (newCurrency) => {
             this.setState({
                 currentCurrency: newCurrency
             });
+        }
+        this.activateLocalStorage = () => {
+            this.setState({
+                currentCategory: localStorage.getItem('currentCategory'),
+                currenctCurrency: JSON.parse(localStorage.getItem('currentCurrency')),
+                cartItemObjects: JSON.parse(localStorage.getItem('cartItemObjects')),
+                totalItems: Number(localStorage.getItem('totalItems')),
+                totalPriceOfCartItems: Number(localStorage.getItem('totalPriceOfCartItems'))
+            });
+        }
+    }
+    componentDidMount(){
+        if(Object.keys(localStorage).length!=0){
+            this.activateLocalStorage();
         }
     }
     //and also total items
@@ -70,11 +84,24 @@ class Main extends React.Component {
         if(Object.keys(this.state.cartItemObjects).length!=Object.keys(prevState.cartItemObjects).length){
             this.changeTotalPriceOfCartItems();
         }
+
+        //update localStorage
+        Object.keys(this.state).forEach((stateousEntry) => {
+            if(typeof(this.state[`${stateousEntry}`])==='object'){
+                localStorage.setItem(stateousEntry, JSON.stringify(this.state[`${stateousEntry}`]));
+            } else {
+                localStorage.setItem(stateousEntry, this.state[`${stateousEntry}`]);
+            }
+        });
+        console.log(localStorage)
     }
     render() {
         return <main className="MainCont">
+            <button className='clear-localStorage' onClick={()=>{
+                localStorage.clear();
+            }}>Clear localStorage</button>
             <Navbar popUpsClosed={this.props.popUpsClosed} currencies={this.props.currencies} changeCategory={this.changeCategory}
-                currentCategory={this.state.currenctCategory} currentCurrency={this.state.currentCurrency}
+                currentCategory={this.state.currentCategory} currentCurrency={this.state.currentCurrency}
                 changeCurrency={this.changeCurrency} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed}
                 cartItemObjects={this.state.cartItemObjects} changeSpecificItemAmount={this.changeSpecificItemAmount.bind(this)}
                 rebuildCart={this.rebuildCart.bind(this)} cartItemObjectKeys={Object.keys(this.state.cartItemObjects)}
@@ -85,7 +112,7 @@ class Main extends React.Component {
                 {["/", "all", "clothes", "tech"].map((path, index) => 
                 
                 <Route path={path} key={index} element={<ProductDisplay betterPrices={this.props.betterPrices} data={this.props.data} 
-                currentCategory={this.state.currenctCategory}
+                currentCategory={this.state.currentCategory}
                 cartItemObjects={this.state.cartItemObjects}
                 currentCurrency={this.state.currentCurrency} 
                 addCartItem={this.addCartItem.bind(this)} 

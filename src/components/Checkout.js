@@ -9,14 +9,14 @@ class Checkout extends React.Component { //prop list --> changeSpecificItemAmoun
         return <div className="checkout-detailed">
             <span className='cart-title-checkout'>CART</span>
             <div className="cart-item-object-cont">
-                {this.props.cartItemObjectKeys.length>0 && this.props.cartItemObjectKeys.map((cartItemKey, index) =>  
-                    <div key={index} className="cart-item-object">
+                {this.props.cartItemObjectKeys.length>0 && this.props.cartItemObjectKeys.map((cartItemKey) =>  
+                    <div key={cartItemKey} className="cart-item-object">
                         <CheckoutItemInCart 
                         betterPrices={this.props.betterPrices}
                         changeSpecificItemAmount={this.props.changeSpecificItemAmount} rebuildCart={this.props.rebuildCart} cartItemObjectKeys={this.props.cartItemObjectKeys}
                         cartItemObjects={this.props.data} changeTotalPriceOfCartItems={this.props.changeTotalPriceOfCartItems}
                         currentCurrency={this.props.currentCurrency} data={this.props.data[cartItemKey]}
-                        totalItems={this.props.totalItems} key={index+1} />
+                        totalItems={this.props.totalItems} key={cartItemKey}/>
                     </div>
                 )
                 }

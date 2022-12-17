@@ -45,13 +45,6 @@ code {
 .no-display-opacity {
   opacity: 0 !important;
 }
-.no-display * {
-  /* display: none; */
-  /* height: 0 !important; 
-  font-size: 0 !important;
-  border: none !important; */
-  /* display: none !important; */
-}
 .testerdiv {
   height: 100px;
   width: 150px;
@@ -91,6 +84,25 @@ button, input[type="submit"], input[type="reset"] {
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+}
+.clear-localStorage {
+  z-index: 1000;
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  transform-origin: left;
+  transform: scale(0.25, 0.75);
+  overflow: hidden;
+  color: rgba(220, 20, 60, 0.0);
+  background-color: rgba(220, 20, 60, 0.4);
+  transition: all 0.05s;
+}
+.clear-localStorage:hover {
+  background-color: rgba(220,20,60,0.8);
+  color: white;
+  transform: scaleX(1);
 }
 .useful-image-style {
   height: 100%;
@@ -800,9 +812,6 @@ header {
 }
 .colorAttribute:not(.static-attribute):hover:after, .colorAttribute:not(.static-attribute):hover:before {
   opacity: 1;
-}
-.colorAttribute:hover {
-  /* border: 1px solid white; */
 }
 .colorAttribute::after {
   opacity: 0;
