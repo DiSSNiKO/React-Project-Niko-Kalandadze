@@ -12,7 +12,6 @@ class ProductDetailedDisplay extends React.Component {
         }
     }
     setSpecificData(){
-        // console.log(findSpecificData(this.props.data))
         this.setState({
             initialRender:false,
             specificData: findSpecificData(this.props.data)
@@ -24,7 +23,7 @@ class ProductDetailedDisplay extends React.Component {
     render() {
         return <div>
             {this.state.initialRender && <div></div>}
-            {!this.state.initialRender && <ProductPageActual data={this.state.specificData} currentCurrency={this.props.currentCurrency}/>} 
+            {!this.state.initialRender && <ProductPageActual betterPrices={this.props.betterPrices} cartItemObjects={this.props.cartItemObjects} addCartItem={this.props.addCartItem} data={this.state.specificData} currentCurrency={this.props.currentCurrency}/>} 
         </div>
     }
 }
