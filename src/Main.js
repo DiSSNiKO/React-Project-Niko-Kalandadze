@@ -48,7 +48,7 @@ class Main extends React.Component {
         this.activateLocalStorage = () => {
             this.setState({
                 currentCategory: localStorage.getItem('currentCategory'),
-                currenctCurrency: JSON.parse(localStorage.getItem('currentCurrency')),
+                currentCurrency: JSON.parse(localStorage.getItem('currentCurrency')),
                 cartItemObjects: JSON.parse(localStorage.getItem('cartItemObjects')),
                 totalItems: Number(localStorage.getItem('totalItems')),
                 totalPriceOfCartItems: Number(localStorage.getItem('totalPriceOfCartItems'))

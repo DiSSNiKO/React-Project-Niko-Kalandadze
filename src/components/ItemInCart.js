@@ -18,10 +18,12 @@ class ItemInCart extends React.Component {
     render(){
         return <div className="cart-item-wrapper cart-overlay-part">
             <div className='cart-item-attributes thin-scrollbar-cstm cart-overlay-part'>
-            <div className='cart-overlay-part cart-item-info'>{this.props.data['name']}</div>
-            <div className='cart-overlay-part cart-item-info'>{this.props.data['brand']}</div>
-            <div className='cart-overlay-part product-price cart-item-info'>{this.props.currentCurrency['symbol']}{this.props.betterPrices[this.props.data["id"]][this.props.currentCurrency['label']]}</div>
-            {this.props.data['attributes'].length != 0 && this.props.data['attributes'].map((item, index) => <AttributeContForOverlay highlightedAttributes={this.props.data['highlightedAttributes']} item={item} key={index}/>)}
+            <div>
+                <div className='cart-overlay-part cart-item-info'>{this.props.data['name']}</div>
+                <div className='cart-overlay-part cart-item-info'>{this.props.data['brand']}</div>
+                <div className='cart-overlay-part product-price cart-item-info'>{this.props.currentCurrency['symbol']}{this.props.betterPrices[this.props.data["id"]][this.props.currentCurrency['label']]}</div>
+            </div>
+            {this.props.data['attributes'].length !== 0 && this.props.data['attributes'].map((item, index) => <AttributeContForOverlay highlightedAttributes={this.props.data['highlightedAttributes']} item={item} key={index}/>)}
             </div>
             <div className='cart-overlay-part' style={{display:"flex"}}>
                 <div className='increase-decrease cart-overlay-part'>

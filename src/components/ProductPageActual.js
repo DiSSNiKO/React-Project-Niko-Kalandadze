@@ -80,11 +80,13 @@ class ProductPageActual extends React.Component {
     }
     render() {
         return <div className="product-detailed-display">
-            <div className='image-selection thin-scrollbar-cstm'>
-                {this.props.data['gallery'].map((item, index) => <SelectionImage key={index} image={item} setFocusedImage={this.setFocusedImage.bind(this)}/>)}
-            </div>
-            <div className='focused-image-wrapper'>
-                <img src={this.state.focusedImage} alt="" />
+            <div className='product-images-container'>
+                <div className='image-selection thin-scrollbar-cstm'>
+                    {this.props.data['gallery'].map((item, index) => <SelectionImage key={index} image={item} setFocusedImage={this.setFocusedImage.bind(this)}/>)}
+                </div>
+                <div className='focused-image-wrapper'>
+                    <img src={this.state.focusedImage} alt="" />
+                </div>
             </div>
             <div className="product-attributes">
                 <div className='attributes-product-name big-title'>{this.props.data.name}</div>
