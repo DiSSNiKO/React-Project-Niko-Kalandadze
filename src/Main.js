@@ -56,7 +56,7 @@ class Main extends React.Component {
         }
     }
     componentDidMount(){
-        if(Object.keys(localStorage).includes('currentCurrency')){
+        if(Object.keys(localStorage).includes('currentCurrency')){ //if one of the states is included in storage, then all of them are
             this.activateLocalStorage();
         }
     }

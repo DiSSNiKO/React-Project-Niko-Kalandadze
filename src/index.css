@@ -968,7 +968,7 @@ header {
   margin-top: 20px;
 }
 
-/* TARKHNA FROM HERE */
+/* Responsivity */
 @media only screen and (max-width: 1400px) {
   .product-display{
     padding: 0px;
