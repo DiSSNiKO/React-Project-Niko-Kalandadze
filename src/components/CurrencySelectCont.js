@@ -6,7 +6,7 @@ class CurrencySelectCont extends React.Component {
         super();
         this.state = {
             currencies:{},
-            curAvailabe : true,
+            curAvailabe : false,
             dropboxVisible: false,
             neededClasses: ['no-display-pseudo', ''],
         };
@@ -60,8 +60,10 @@ class CurrencySelectCont extends React.Component {
               });
           });
     }
-
     componentDidUpdate(prevProps) {
+        if(Object.keys(this.props.currentCurrency).length===0 && this.state.curAvailabe){
+            this.props.changeCurrency(this.state.currencies[Object.keys(this.state.currencies)[0]]);
+        }
         if (this.props.popUpsClosed && prevProps.popUpsClosed!==this.props.popUpsClosed) {
             this.setState({
                 dropboxVisible: false,
@@ -70,13 +72,15 @@ class CurrencySelectCont extends React.Component {
         }
     }
     render() {
-        return <div className="change-currency">
+        if(Object.keys(this.props.currentCurrency).length!==0){
+            return <div className="change-currency">
             <div className="selectButtonDiv">
                 <button className="initializeSelect chcur" onClick={this.handleDropbox.bind(this)}>{this.props.currentCurrency['symbol']}</button>
-                <div className={`selectArrow ${this.state.neededClasses[1]}`}></div>
+            <div className={`selectArrow ${this.state.neededClasses[1]}`}></div>
             </div>
-            {this.state.curAvailabe===true ? <CurrencyList neededClasses={this.state.neededClasses} betterCurrencyObject={this.state.currencies} handleCurrencyChange={this.handleCurrencyChange.bind(this)}/> : <div></div>}
-        </div>
+                {this.state.curAvailabe===true ? <CurrencyList neededClasses={this.state.neededClasses} betterCurrencyObject={this.state.currencies} handleCurrencyChange={this.handleCurrencyChange.bind(this)}/> : <div></div>}
+            </div>
+        }
     }
 }
 export default CurrencySelectCont;

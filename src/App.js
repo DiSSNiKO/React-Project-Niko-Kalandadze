@@ -11,7 +11,6 @@ const errorLink = onError(({ graphqlErrors, networkErrors }) => {
   }
 });
 
-
 const link = from([
   errorLink,
   new HttpLink({ uri: "http://localhost:4000/graphql" })
@@ -21,9 +20,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: link
 });
-
-const productIds = ['apple-airtag', 'apple-airpods-pro', 'apple-iphone-12-pro',
-  'jacket-canada-goosee', 'huarache-x-stussy-le', 'ps-5', 'xbox-series-s', 'apple-imac-2021'];
 
 class App extends React.Component {
   constructor() {
@@ -51,7 +47,7 @@ class App extends React.Component {
           }
         }
       }}>
-        <Main gql={gql} client={client} popUpsClosed={this.state.popUpWindowsClosed} setPopUpWindowsClosed={this.setPopUpWindowsClosed.bind(this)} currencies={this.betterCurrencyObject} />
+        <Main gql={gql} client={client} popUpsClosed={this.state.popUpWindowsClosed} setPopUpWindowsClosed={this.setPopUpWindowsClosed.bind(this)} />
       </div>
     </ApolloProvider>
   }

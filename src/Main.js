@@ -9,12 +9,10 @@ class Main extends React.Component {
     constructor() {
         super();
         this.state = {
-            currentCategory: 'all',
-            currentCurrency: {
-                'label':'USD',
-                'symbol':'$'
-            },
-            cartItemObjects : {},
+            allCategories: [],
+            currentCategory: '',
+            currentCurrency: {},
+            cartItemObjects: {},
             totalPriceOfCartItems: 0.00, // in USD
             totalItems: 0 
         }
@@ -29,6 +27,11 @@ class Main extends React.Component {
             this.setState((prevState)=>({
                 cartItemObjects: {...prevState.cartItemObjects, [`${identifi}`]:newAmount}
             }));
+        }
+        this.setAllCategories = (categories) => {
+            this.setState({
+                allCategories: categories
+            });
         }
         this.rebuildCart = (newCartConfig) => {
             this.setState({
@@ -51,7 +54,8 @@ class Main extends React.Component {
                 currentCurrency: JSON.parse(localStorage.getItem('currentCurrency')),
                 cartItemObjects: JSON.parse(localStorage.getItem('cartItemObjects')),
                 totalItems: Number(localStorage.getItem('totalItems')),
-                totalPriceOfCartItems: Number(localStorage.getItem('totalPriceOfCartItems'))
+                totalPriceOfCartItems: Number(localStorage.getItem('totalPriceOfCartItems')),
+                allCategories: JSON.parse(localStorage.getItem('allCategories'))
             });
         }
     }
@@ -87,7 +91,7 @@ class Main extends React.Component {
 
         //update localStorage
         Object.keys(this.state).forEach((stateousEntry) => {
-            if(typeof(this.state[`${stateousEntry}`])==='object'){
+            if(typeof(this.state[`${stateousEntry}`])==='object' || typeof(this.state[`${stateousEntry}`])==='array'){
                 localStorage.setItem(stateousEntry, JSON.stringify(this.state[`${stateousEntry}`]));
             } else {
                 localStorage.setItem(stateousEntry, this.state[`${stateousEntry}`]);
@@ -99,7 +103,8 @@ class Main extends React.Component {
             <button className='clear-localStorage' onClick={()=>{
                 localStorage.clear();
             }}>Clear localStorage</button>
-            <Navbar gql={this.props.gql} client={this.props.client} popUpsClosed={this.props.popUpsClosed} currencies={this.props.currencies} changeCategory={this.changeCategory}
+            <Navbar setAllCategories={this.setAllCategories.bind(this)} gql={this.props.gql} client={this.props.client} popUpsClosed={this.props.popUpsClosed} currencies={this.props.currencies}
+                changeCategory={this.changeCategory.bind(this)}
                 currentCategory={this.state.currentCategory} currentCurrency={this.state.currentCurrency}
                 changeCurrency={this.changeCurrency} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed}
                 cartItemObjects={this.state.cartItemObjects} changeSpecificItemAmount={this.changeSpecificItemAmount.bind(this)}
@@ -108,16 +113,17 @@ class Main extends React.Component {
                 changeTotalPriceOfCartItems={this.changeTotalPriceOfCartItems.bind(this)}
                 betterPrices={this.props.betterPrices}/>
             <Routes>
-                {["/", "all", "clothes", "tech"].map((path, index) => 
-                
-                <Route path={path} key={index} element={<ProductDisplay gql={this.props.gql} client={this.props.client} betterPrices={this.props.betterPrices} data={this.props.data} 
-                currentCategory={this.state.currentCategory}
-                cartItemObjects={this.state.cartItemObjects}
-                currentCurrency={this.state.currentCurrency} 
-                addCartItem={this.addCartItem.bind(this)} 
-                cartItemObjectKeys={Object.keys(this.state.cartItemObjects)}
-                changeSpecificItemAmount={this.changeSpecificItemAmount.bind(this)}
-                changeTotalPriceOfCartItems={this.changeTotalPriceOfCartItems.bind(this)} />} />)}
+                {Object.keys(this.state.allCategories).map((path, index) => {
+                    return <Route path={`/${path}`} key={index*3.5} element={<ProductDisplay gql={this.props.gql} client={this.props.client} 
+                    displayCategory={path}
+                    changeCategory={this.changeCategory.bind(this)}
+                    cartItemObjects={this.state.cartItemObjects}
+                    currentCurrency={this.state.currentCurrency} 
+                    addCartItem={this.addCartItem.bind(this)} 
+                    cartItemObjectKeys={Object.keys(this.state.cartItemObjects)}
+                    changeSpecificItemAmount={this.changeSpecificItemAmount.bind(this)}
+                    changeTotalPriceOfCartItems={this.changeTotalPriceOfCartItems.bind(this)} />} />
+                })}
                 
                 <Route path="/checkout" element={<Checkout 
                 betterPrices={this.props.betterPrices}

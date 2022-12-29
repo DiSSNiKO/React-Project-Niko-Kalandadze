@@ -2,19 +2,18 @@ import React from "react";
 import ProductListing from './ProductListing';
 
 class ProductDisplay extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            productsData:[]
+            productsData: []
         };
     }
-    renderCategoryProducts(prevProps){
-        let isDifferent = false;
+    renderCategoryProducts(){
         let deita;
         this.props.client.query({
             query: this.props.gql `
             {
-                category (input:{title:"${this.props.currentCategory}"}) {
+                category (input:{title:"${this.props.displayCategory}"}) {
                   name
                   products {
                     id
@@ -46,34 +45,24 @@ class ProductDisplay extends React.Component {
             `
         }).then(response=>{
             deita = response.data.category.products;
-            if(this.state.productsData.length===0){
-                this.setState({
-                    productsData : deita
-                });
-            }
-            else if(deita){
-                if(prevProps.currentCategory!=this.props.currentCategory){
-                    isDifferent=true;
-                }
-                if(isDifferent===true){
-                    this.setState({
-                        productsData : deita
-                    });
-                    
-                }
-            }
+            this.setState({
+                productsData: deita
+            });
         });
-        
     }
-    componentDidMount(prevProps, prevState){
-        this.renderCategoryProducts(prevProps);
+    componentDidMount(){
+        this.renderCategoryProducts();
     }
-    componentDidUpdate(prevProps, prevState){
-        this.renderCategoryProducts(prevProps);
+    componentDidUpdate(prevProps){
+        if(this.props.displayCategory!=prevProps.displayCategory){
+            this.renderCategoryProducts();
+            this.props.changeCategory(this.props.displayCategory);
+        }
     }
     render() {
-        return <div className="product-display">
-            <h2 className="category-title">{this.props.currentCategory.toUpperCase()}</h2>
+        if(Object.entries(this.props.currentCurrency).length>0){ //if it's not an empty object
+            return <div className="product-display">
+            <h2 className="category-title">{this.props.displayCategory.toUpperCase()}</h2>
             <div className="product-listings">
                 {this.state.productsData.map((item, index) => {
                     return <ProductListing key={index}
@@ -93,6 +82,7 @@ class ProductDisplay extends React.Component {
                 })}
             </div>
         </div>
+        }
     }
 }
 
