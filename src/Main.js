@@ -93,14 +93,13 @@ class Main extends React.Component {
                 localStorage.setItem(stateousEntry, this.state[`${stateousEntry}`]);
             }
         });
-        console.log(localStorage)
     }
     render() {
         return <main className="MainCont">
             <button className='clear-localStorage' onClick={()=>{
                 localStorage.clear();
             }}>Clear localStorage</button>
-            <Navbar popUpsClosed={this.props.popUpsClosed} currencies={this.props.currencies} changeCategory={this.changeCategory}
+            <Navbar gql={this.props.gql} client={this.props.client} popUpsClosed={this.props.popUpsClosed} currencies={this.props.currencies} changeCategory={this.changeCategory}
                 currentCategory={this.state.currentCategory} currentCurrency={this.state.currentCurrency}
                 changeCurrency={this.changeCurrency} setPopUpWindowsClosed={this.props.setPopUpWindowsClosed}
                 cartItemObjects={this.state.cartItemObjects} changeSpecificItemAmount={this.changeSpecificItemAmount.bind(this)}
@@ -111,7 +110,7 @@ class Main extends React.Component {
             <Routes>
                 {["/", "all", "clothes", "tech"].map((path, index) => 
                 
-                <Route path={path} key={index} element={<ProductDisplay betterPrices={this.props.betterPrices} data={this.props.data} 
+                <Route path={path} key={index} element={<ProductDisplay gql={this.props.gql} client={this.props.client} betterPrices={this.props.betterPrices} data={this.props.data} 
                 currentCategory={this.state.currentCategory}
                 cartItemObjects={this.state.cartItemObjects}
                 currentCurrency={this.state.currentCurrency} 

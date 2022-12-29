@@ -271,8 +271,8 @@ main {
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  column-gap: 70px;
-  row-gap: 100px;
+  column-gap: 40px;
+  row-gap: 40px;
 }
 
 .product-listing-and-bfplp {
@@ -285,6 +285,7 @@ main {
 .product-listing {
   text-decoration: none;
   color: #1D1F22;
+  width: 100%;
 }
 .product-listing-and-bfplp:hover>.product-listing>.product-listing-wrapper-a {
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);

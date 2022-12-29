@@ -1,9 +1,12 @@
 import React from "react";
+import CurrencyList from "./CurrencyList";
 
 class CurrencySelectCont extends React.Component {
     constructor() {
         super();
         this.state = {
+            currencies:{},
+            curAvailabe : true,
             dropboxVisible: false,
             neededClasses: ['no-display-pseudo', ''],
         };
@@ -25,13 +28,39 @@ class CurrencySelectCont extends React.Component {
         }
     }
     handleCurrencyChange = (e) => {
-        const newCurrency = this.props.currencies[e.target.value];
+        const newCurrency = this.state.currencies[e.target.value];
         this.props.changeCurrency(newCurrency);
         this.setState({
             dropboxVisible: false,
             neededClasses: ['no-display-pseudo', '']
         });
     }
+
+    componentDidMount(){
+        let betterCurrencyObject = {};
+        this.props.client.query({
+            query: this.props.gql `
+            {
+                currencies {
+                    symbol
+                    label
+                }
+            }
+            `
+        }).then(result => {
+            result.data.currencies.forEach((curObject)=>{
+                betterCurrencyObject[curObject.label]={
+                    'label':curObject.label,
+                    'symbol':curObject.symbol
+                }
+            });
+            this.setState({
+                currencies : betterCurrencyObject,
+                curAvailabe : true
+              });
+          });
+    }
+
     componentDidUpdate(prevProps) {
         if (this.props.popUpsClosed && prevProps.popUpsClosed!==this.props.popUpsClosed) {
             this.setState({
@@ -46,14 +75,7 @@ class CurrencySelectCont extends React.Component {
                 <button className="initializeSelect chcur" onClick={this.handleDropbox.bind(this)}>{this.props.currentCurrency['symbol']}</button>
                 <div className={`selectArrow ${this.state.neededClasses[1]}`}></div>
             </div>
-            <div className={`select-currency ${this.state.neededClasses[0]}`}>
-                {Object.entries(this.props.currencies).map((elem, index) => {
-                    return <label key={index} htmlFor={`${elem[1]['label']}option`}>{elem[1].symbol} {elem[1].label}</label>
-                })}
-                {Object.entries(this.props.currencies).map((elem, index) => {
-                    return <input key={index} type="radio" value={`${elem[1].label}`} id={`${elem[1]['label']}option`} className="option chcur" name="cur" onChange={this.handleCurrencyChange.bind(this)} />
-                })}
-            </div>
+            {this.state.curAvailabe===true ? <CurrencyList neededClasses={this.state.neededClasses} betterCurrencyObject={this.state.currencies} handleCurrencyChange={this.handleCurrencyChange.bind(this)}/> : <div></div>}
         </div>
     }
 }

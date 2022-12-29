@@ -33,9 +33,6 @@ class App extends React.Component {
       dataIsFetched: false,
       productsFetched: false
     }
-    this.dataProgress = 0;
-    this.usableData = {};
-    this.betterPrices = {};
     this.betterCurrencyObject = {};
   }
   setPopUpWindowsClosed(val){
@@ -43,78 +40,7 @@ class App extends React.Component {
       popUpWindowsClosed:val
     });
   }
-  componentDidMount() {
-    const amountOfItems = productIds.length;
-    productIds.forEach((itemId) => {
-      let betterPricesObject = {};
-      this.fetchedData = client.query({
-        query: gql`
-        {
-          product(id:"${itemId}"){
-            id
-            name
-            prices {
-              amount
-              currency {
-                label
-                symbol
-              }
-            }
-            inStock
-            gallery
-            description
-            category
-            brand
-            attributes {
-              id
-              name
-              type
-              items {
-                value
-                displayValue
-              }
-            }
-          }
-        }`
-      }).then(result => {
-        result.data.product.prices.forEach(priceArr => {
-          betterPricesObject[priceArr["currency"]['label']]= priceArr['amount']
-        });
-        this.usableData[`${result.data.product.id}`] = result.data.product;
-        this.betterPrices[result.data.product.id] = betterPricesObject
-        this.dataProgress++;
-        if(this.dataProgress===amountOfItems){
-          this.setState({
-            productsFetched:true
-          })
-        }
-      });
-    });
-  }
-  componentDidUpdate(){
-    if(this.state.productsFetched && this.state.dataIsFetched===false){
-      this.fetchedData = client.query({
-        query: gql`
-        {
-          currencies {
-            label
-            symbol
-          }
-        }
-        `
-      }).then(result => {
-        result.data.currencies.forEach((curObject)=>{
-          this.betterCurrencyObject[curObject.label]={
-            'label':curObject.label,
-            'symbol':curObject.symbol
-          }
-        });
-        this.setState({
-          dataIsFetched: true
-        });
-      })
-    }
-  }
+
   render() {
     return <ApolloProvider client={client}>
       <div className="App" onClick={(e) => {
@@ -125,8 +51,7 @@ class App extends React.Component {
           }
         }
       }}>
-        {!this.state.dataIsFetched && <Loading />}
-        {this.state.dataIsFetched && <Main popUpsClosed={this.state.popUpWindowsClosed} setPopUpWindowsClosed={this.setPopUpWindowsClosed.bind(this)} data={Object.entries(this.usableData)} betterPrices={this.betterPrices} currencies={this.betterCurrencyObject} />}
+        <Main gql={gql} client={client} popUpsClosed={this.state.popUpWindowsClosed} setPopUpWindowsClosed={this.setPopUpWindowsClosed.bind(this)} currencies={this.betterCurrencyObject} />
       </div>
     </ApolloProvider>
   }
