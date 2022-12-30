@@ -29,6 +29,7 @@ class ProductPageActual extends React.Component {
         });
     }
     componentDidMount() {
+        console.log(this.props.data)
         this.cartItemIdentifier = `${this.props.data.name}${this.props.data.brand}${objectToString(this.props.data.name)}`;
         let attributesStateObject = {};
         if (this.props.data['attributes']) {
@@ -49,7 +50,7 @@ class ProductPageActual extends React.Component {
         let alreadyExists = false;
         const toAdd =
         {
-            attributes: this.props.data["attributes"],
+            attributes: this.props.data["attributes"]["items"],
             brand: this.props.data["brand"],
             name: this.props.data['name'],
             price: this.props.data['prices'][0]['amount'], //price in dollars

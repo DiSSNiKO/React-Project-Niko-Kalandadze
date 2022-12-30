@@ -5,8 +5,7 @@ class ProductDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            productsData: [],
-            firstLoad: true
+            productsData: []
         };
     }
     renderCategoryProducts() {
@@ -46,17 +45,19 @@ class ProductDisplay extends React.Component {
             `
         }).then(response => {
             deita = response.data.category.products;
+            console.log(deita)
             this.setState({
                 productsData: deita
             });
         });
     }
     componentDidMount() {
-        this.setState({ firstLoad: true })
+        this.setState({
+            firstLoad: true
+        });
     }
     componentDidUpdate(prevProps) {
-        console.log('rao')
-        if (this.props.displayCategory != prevProps.displayCategory || this.state.firstLoad) {
+        if (this.props.displayCategory != prevProps.displayCategory || (this.state.firstLoad && this.props.displayCategory != undefined)) {
             //works like a charm
             this.renderCategoryProducts();
             this.props.changeCategory(this.props.displayCategory);
