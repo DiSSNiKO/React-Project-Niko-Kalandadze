@@ -1,7 +1,6 @@
 import Main from './Main';
-import Loading from './Loading';
 import React from "react";
-import { ApolloClient, InMemmoryCache, ApolloProvider, HttpLink, from, InMemoryCache, gql } from '@apollo/client';
+import { ApolloClient, ApolloProvider, HttpLink, from, InMemoryCache, gql } from '@apollo/client';
 import { ErrorLink, onError } from '@apollo/client/link/error';
 
 
@@ -29,11 +28,10 @@ class App extends React.Component {
       dataIsFetched: false,
       productsFetched: false
     }
-    this.betterCurrencyObject = {};
   }
-  setPopUpWindowsClosed(val){
+  setPopUpWindowsClosed(val) {
     this.setState({
-      popUpWindowsClosed:val
+      popUpWindowsClosed: val
     });
   }
 
@@ -41,8 +39,8 @@ class App extends React.Component {
     return <ApolloProvider client={client}>
       <div className="App" onClick={(e) => {
         const etarget = e.target;
-        if(!etarget.classList.contains("cart-overlay-part")){
-          if(this.state.popUpWindowsClosed===false){
+        if (!etarget.classList.contains("cart-overlay-part")) {
+          if (this.state.popUpWindowsClosed === false) {
             this.setPopUpWindowsClosed(true);
           }
         }
