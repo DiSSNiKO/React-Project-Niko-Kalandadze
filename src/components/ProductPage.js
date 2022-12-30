@@ -50,8 +50,6 @@ class ProductDetailedDisplay extends React.Component {
             }
             `
         }).then(result => {
-            console.log(productId)
-            console.log(result.data.product.attributes[0].items)
             if (result.data.product != null) { //If it's not null, the ID is valid
                 this.setState({
                     specificData: result.data.product,

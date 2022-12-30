@@ -82,7 +82,6 @@ class Main extends React.Component {
                 }
                 `
             }).then(result => {
-                console.log(result)
                 let categoryStateObject = {};
                 result.data.categories.forEach(categoryObj => {
                     categoryStateObject[categoryObj.name] = categoryObj.name;
@@ -155,7 +154,7 @@ class Main extends React.Component {
                 />
                 <Routes>
                     {Object.keys(this.state.allCategories).map((path, index) => {
-                        return <Route exact path={"/" + path} key={index * 3.5} element={<ProductDisplay gql={this.props.gql} client={this.props.client}
+                        return <Route exact path={"/" + path} key={index} element={<ProductDisplay gql={this.props.gql} client={this.props.client}
                             displayCategory={path}
                             allCategories={Object.keys(this.state.allCategories)}
                             changeCategory={this.changeCategory.bind(this)}

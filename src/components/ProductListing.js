@@ -14,7 +14,6 @@ class ProductListing extends React.Component {
         this.quickAddProduct = `${this.props.title}${this.props.brand}${objectToString(this.allSelectedAttributes)}`;
     }
     componentDidMount() {
-        console.log(this.props.fullData)
         this.getDefaultAttributes(this.props.fullData.attributes);
     }
     render() {

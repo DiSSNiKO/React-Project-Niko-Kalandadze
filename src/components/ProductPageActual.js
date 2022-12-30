@@ -29,7 +29,6 @@ class ProductPageActual extends React.Component {
         });
     }
     componentDidMount() {
-        console.log(this.props.data)
         this.cartItemIdentifier = `${this.props.data.name}${this.props.data.brand}${objectToString(this.props.data.name)}`;
         let attributesStateObject = {};
         if (this.props.data['attributes']) {
@@ -46,7 +45,6 @@ class ProductPageActual extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         // window.scrollTo(0, 0);
         this.cartItemIdentifier = `${this.props.data.name}${this.props.data.brand}${objectToString(this.state.allSelectedAttributes)}`;
-        console.log(this.cartItemIdentifier)
         let alreadyExists = false;
         const toAdd =
         {

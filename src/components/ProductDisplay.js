@@ -45,7 +45,6 @@ class ProductDisplay extends React.Component {
             `
         }).then(response => {
             deita = response.data.category.products;
-            console.log(deita)
             this.setState({
                 productsData: deita
             });
