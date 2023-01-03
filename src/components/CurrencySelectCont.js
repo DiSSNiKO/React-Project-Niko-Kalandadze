@@ -1,4 +1,5 @@
 import React from "react";
+import CurrencyList from "./CurrencyList";
 
 class CurrencySelectCont extends React.Component {
     constructor() {
@@ -15,8 +16,8 @@ class CurrencySelectCont extends React.Component {
                 neededClass: ['no-display-pseudo', '']
             });
         } else {
-            if(this.props.popUpsClosed===true){
-                this.setState({    
+            if (this.props.popUpsClosed === true) {
+                this.setState({
                     dropboxVisible: true,
                     neededClasses: ['', 'selectArrowOn']
                 });
@@ -32,8 +33,9 @@ class CurrencySelectCont extends React.Component {
             neededClasses: ['no-display-pseudo', '']
         });
     }
+
     componentDidUpdate(prevProps) {
-        if (this.props.popUpsClosed && prevProps.popUpsClosed!==this.props.popUpsClosed) {
+        if (this.props.popUpsClosed && prevProps.popUpsClosed !== this.props.popUpsClosed) {
             this.setState({
                 dropboxVisible: false,
                 neededClasses: ['no-display-pseudo', '']
@@ -41,20 +43,15 @@ class CurrencySelectCont extends React.Component {
         }
     }
     render() {
-        return <div className="change-currency">
-            <div className="selectButtonDiv">
-                <button className="initializeSelect chcur" onClick={this.handleDropbox.bind(this)}>{this.props.currentCurrency['symbol']}</button>
-                <div className={`selectArrow ${this.state.neededClasses[1]}`}></div>
+        if (Object.keys(this.props.currentCurrency).length !== 0) {
+            return <div className="change-currency">
+                <div className="selectButtonDiv">
+                    <button className="initializeSelect chcur" onClick={this.handleDropbox.bind(this)}>{this.props.currentCurrency['symbol']}</button>
+                    <div className={`selectArrow ${this.state.neededClasses[1]}`}></div>
+                </div>
+                <CurrencyList neededClasses={this.state.neededClasses} betterCurrencyObject={this.props.currencies} handleCurrencyChange={this.handleCurrencyChange.bind(this)} />
             </div>
-            <div className={`select-currency ${this.state.neededClasses[0]}`}>
-                {Object.entries(this.props.currencies).map((elem, index) => {
-                    return <label key={index} htmlFor={`${elem[1]['label']}option`}>{elem[1].symbol} {elem[1].label}</label>
-                })}
-                {Object.entries(this.props.currencies).map((elem, index) => {
-                    return <input key={index} type="radio" value={`${elem[1].label}`} id={`${elem[1]['label']}option`} className="option chcur" name="cur" onChange={this.handleCurrencyChange.bind(this)} />
-                })}
-            </div>
-        </div>
+        }
     }
 }
 export default CurrencySelectCont;

@@ -1,7 +1,6 @@
 import Main from './Main';
-import Loading from './Loading';
 import React from "react";
-import { ApolloClient, InMemmoryCache, ApolloProvider, HttpLink, from, InMemoryCache, gql } from '@apollo/client';
+import { ApolloClient, ApolloProvider, HttpLink, from, InMemoryCache, gql } from '@apollo/client';
 import { ErrorLink, onError } from '@apollo/client/link/error';
 
 
@@ -11,19 +10,21 @@ const errorLink = onError(({ graphqlErrors, networkErrors }) => {
   }
 });
 
-
 const link = from([
   errorLink,
   new HttpLink({ uri: "http://localhost:4000/graphql" })
 ]);
 
 const client = new ApolloClient({
+  defaultOptions: {
+    query: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all',
+    }
+  },
   cache: new InMemoryCache(),
   link: link
 });
-
-const productIds = ['apple-airtag', 'apple-airpods-pro', 'apple-iphone-12-pro',
-  'jacket-canada-goosee', 'huarache-x-stussy-le', 'ps-5', 'xbox-series-s', 'apple-imac-2021'];
 
 class App extends React.Component {
   constructor() {
@@ -33,100 +34,24 @@ class App extends React.Component {
       dataIsFetched: false,
       productsFetched: false
     }
-    this.dataProgress = 0;
-    this.usableData = {};
-    this.betterPrices = {};
-    this.betterCurrencyObject = {};
   }
-  setPopUpWindowsClosed(val){
+  setPopUpWindowsClosed(val) {
     this.setState({
-      popUpWindowsClosed:val
+      popUpWindowsClosed: val
     });
   }
-  componentDidMount() {
-    const amountOfItems = productIds.length;
-    productIds.forEach((itemId) => {
-      let betterPricesObject = {};
-      this.fetchedData = client.query({
-        query: gql`
-        {
-          product(id:"${itemId}"){
-            id
-            name
-            prices {
-              amount
-              currency {
-                label
-                symbol
-              }
-            }
-            inStock
-            gallery
-            description
-            category
-            brand
-            attributes {
-              id
-              name
-              type
-              items {
-                value
-                displayValue
-              }
-            }
-          }
-        }`
-      }).then(result => {
-        result.data.product.prices.forEach(priceArr => {
-          betterPricesObject[priceArr["currency"]['label']]= priceArr['amount']
-        });
-        this.usableData[`${result.data.product.id}`] = result.data.product;
-        this.betterPrices[result.data.product.id] = betterPricesObject
-        this.dataProgress++;
-        if(this.dataProgress===amountOfItems){
-          this.setState({
-            productsFetched:true
-          })
-        }
-      });
-    });
-  }
-  componentDidUpdate(){
-    if(this.state.productsFetched && this.state.dataIsFetched===false){
-      this.fetchedData = client.query({
-        query: gql`
-        {
-          currencies {
-            label
-            symbol
-          }
-        }
-        `
-      }).then(result => {
-        result.data.currencies.forEach((curObject)=>{
-          this.betterCurrencyObject[curObject.label]={
-            'label':curObject.label,
-            'symbol':curObject.symbol
-          }
-        });
-        this.setState({
-          dataIsFetched: true
-        });
-      })
-    }
-  }
+
   render() {
     return <ApolloProvider client={client}>
       <div className="App" onClick={(e) => {
         const etarget = e.target;
-        if(!etarget.classList.contains("cart-overlay-part")){
-          if(this.state.popUpWindowsClosed===false){
+        if (!etarget.classList.contains("cart-overlay-part")) {
+          if (this.state.popUpWindowsClosed === false) {
             this.setPopUpWindowsClosed(true);
           }
         }
       }}>
-        {!this.state.dataIsFetched && <Loading />}
-        {this.state.dataIsFetched && <Main popUpsClosed={this.state.popUpWindowsClosed} setPopUpWindowsClosed={this.setPopUpWindowsClosed.bind(this)} data={Object.entries(this.usableData)} betterPrices={this.betterPrices} currencies={this.betterCurrencyObject} />}
+        <Main gql={gql} client={client} popUpsClosed={this.state.popUpWindowsClosed} setPopUpWindowsClosed={this.setPopUpWindowsClosed.bind(this)} />
       </div>
     </ApolloProvider>
   }
