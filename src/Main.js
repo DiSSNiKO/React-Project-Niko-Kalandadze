@@ -187,12 +187,14 @@ class Main extends React.Component {
                         client={this.props.client}
                         currentCurrency={this.state.currentCurrency}
                         cartItemObjects={this.state.cartItemObjects}
+                        changeSpecificItemAmount={this.changeSpecificItemAmount.bind(this)}
+                        changeTotalPriceOfCartItems={this.changeTotalPriceOfCartItems.bind(this)}
                         addCartItem={this.addCartItem.bind(this)} />} />}
 
                 </Routes>
             </main>
         } else {
-            return <div>boohoo</div>
+            return <div>Data is being fetched</div>
         }
     }
 }

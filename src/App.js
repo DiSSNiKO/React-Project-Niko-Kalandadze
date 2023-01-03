@@ -16,6 +16,12 @@ const link = from([
 ]);
 
 const client = new ApolloClient({
+  defaultOptions: {
+    query: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all',
+    }
+  },
   cache: new InMemoryCache(),
   link: link
 });

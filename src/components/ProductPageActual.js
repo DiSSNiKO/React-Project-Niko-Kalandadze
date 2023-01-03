@@ -97,7 +97,7 @@ class ProductPageActual extends React.Component {
                     <div className='generic-title-medium font-weight-700'>{this.props.currentCurrency['symbol']}{this.props.data['prices'].filter(priceObj => { return priceObj['currency']['label'] === this.props.currentCurrency['label'] })[0]['amount']}
                     </div>
                 </div>
-                <button className={`add-to-cart green-button-style ${this.state.existantCombination ? "in-cart" : ""} ${this.props.data['inStock'] ? "" : "not-in-stock"}`}
+                <button className={`add-to-cart green-button-style`}
                     onClick={() => {
                         if (!this.state.existantCombination) {
                             this.props.addCartItem(
@@ -113,9 +113,12 @@ class ProductPageActual extends React.Component {
                                 },
                                 this.cartItemIdentifier
                             );
+                        } else {
+                            this.props.changeSpecificItemAmount(this.cartItemIdentifier, 1);
                         }
-                    }}>{this.props.data['inStock'] ? `${this.state.existantCombination ? "ALREADY IN CART" : "ADD TO CART"}` : "OUT OF STOCK"}</button>
-                <div className='product-description thin-scrollbar-cstm' dangerouslySetInnerHTML={{ __html: this.props.data.description }}></div>
+                        this.props.changeTotalPriceOfCartItems();
+                    }}>{this.props.data['inStock'] ? `${this.state.existantCombination ? "ADD MORE" : "ADD TO CART"}` : "OUT OF STOCK"}</button>
+                <div className='product-description' dangerouslySetInnerHTML={{ __html: this.props.data.description }}></div>
             </div>
         </div>
     }
